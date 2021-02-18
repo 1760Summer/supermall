@@ -1,5 +1,5 @@
 <template>
-  <tab-bar>
+  <tab-bar class="tabbar">
     <tab-bar-item path="/home" activeColor="deeppink">
       <img slot="item-icon" src="~assets/img/tabbar/home.svg" alt="" />
       <img
@@ -52,4 +52,7 @@ export default {
 </script>
 
 <style>
+  .tabbar {
+    z-index: 9;
+  }
 </style>

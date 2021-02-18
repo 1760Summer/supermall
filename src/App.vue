@@ -12,11 +12,10 @@ export default {
   name: 'app',
   components: {
     MainTabBar
-    
   }
 }
 </script>
 
-<style>
+<style scoped>
 @import "assets/css/base.css";
 </style>
