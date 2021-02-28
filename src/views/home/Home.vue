@@ -11,9 +11,9 @@
         <home-swiper :banners="banners"></home-swiper>
     <recommend-view :recommends="recommends"></recommend-view>
     <feature-view></feature-view>
-    <tab-control class="tab-control" 
-                :titles="['流行','新款','精选']"
-                @tabClick="tabClick"></tab-control>
+    <tab-control :titles="['流行','新款','精选']"
+                 @tabClick="tabClick"
+                  ref="tabControl"></tab-control>
     <goods-list :goods="showGoods"></goods-list>
     </scroll>
     
@@ -32,6 +32,7 @@ import RecommendView from './childComps/RecommendView'
 import FeatureView from './childComps/FeatureView'
 
 import {getHomeMultidata,getHomeGoods} from "network/home"
+import {debounce} from "common/utils"
 
 
 export default {
@@ -56,7 +57,8 @@ export default {
         'sell': {page: 0, list: []},
       },
       currentType: 'pop',
-      isShowBackTop: false
+      isShowBackTop: false,
+      tabOffsetTop: 0
     }
   },
   computed: {
@@ -71,6 +73,15 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+  },
+  mounted () {
+    //防抖动
+    const refresh = debounce(this.$refs.scroll.refresh, 200)
+    //1.监听item中图片加载完成
+    this.$bus.$on('itemImageLoad', () => {
+      refresh()
+    })
+    //2.获取tabControl的offsetTop
   },
   methods: {
     //事件监听相关
@@ -129,11 +140,7 @@ export default {
     top: 0;
     z-index: 9;
   }
-  .tab-control {
-    position: sticky;
-    top: 44px;
-    z-index: 9;
-  }
+  
   .content {
     position: absolute;
     overflow: hidden;
